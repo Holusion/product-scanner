@@ -1,0 +1,32 @@
+{
+  "name": "product-scanner",
+  "version": "1.0.0",
+  "description": "MDNS network scanner for holusion products",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "node example.js",
+    "test": "tap test/index_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Holusion/product-scanner.git"
+  },
+  "keywords": [
+    "mdns",
+    "bonjour",
+    "network",
+    "scan"
+  ],
+  "author": "Sebastien DUMETZ <s.dumetz@holusion.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Holusion/product-scanner/issues"
+  },
+  "homepage": "https://github.com/Holusion/product-scanner#readme",
+  "dependencies": {
+    "mdns": "^2.4.0"
+  },
+  "devDependencies": {
+    "tap": "^12.1.0"
+  }
+}
