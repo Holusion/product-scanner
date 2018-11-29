@@ -1,5 +1,5 @@
 {
-  "name": "product-scanner",
+  "name": "@holusion/product-scanner",
   "version": "1.0.0",
   "description": "MDNS network scanner for holusion products",
   "main": "lib/index.js",
