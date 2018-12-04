@@ -2,10 +2,11 @@
   "name": "@holusion/product-scanner",
   "version": "1.0.0",
   "description": "MDNS network scanner for holusion products",
+  "public": true,
   "main": "lib/index.js",
   "scripts": {
     "start": "node example.js",
-    "test": "tap test/index_test.js"
+    "test": "tap test/**_test.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,9 @@
   },
   "homepage": "https://github.com/Holusion/product-scanner#readme",
   "dependencies": {
-    "mdns": "^2.4.0"
+    "isomorphic-fetch": "^2.2.1",
+    "mdns": "^2.4.0",
+    "sqlite": "^3.0.0"
   },
   "devDependencies": {
     "tap": "^12.1.0"
