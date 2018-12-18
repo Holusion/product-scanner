@@ -26,13 +26,21 @@ test("Node.merge()",function(t){
     t.deepEqual(n1, n2);
     t.end();
   });
-  t.test("keep special values",function(t){
+  t.test("keep known values",function(t){
+    const n1 = new Node({name: "toto", fullname:"foobar"})
+    const n2 = new Node({name: "toto"})
+    n1.merge(n2);
+    t.equal(n1.fullname, "foobar");
+    t.end();
+  })
+  t.test("delete unknown values",function(t){
     const n1 = new Node({name: "toto", bar:"foobar"})
     const n2 = new Node({name: "toto"})
     n1.merge(n2);
-    t.equal(n1.bar, "foobar");
+    t.equal(typeof n1.bar, "undefined");
     t.end();
   })
+  
   t.test("can merge invalid values",function(t){
     const n1 = new Node({name: "toto", bar:"foobar"})
     n1.merge(null);

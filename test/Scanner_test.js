@@ -65,6 +65,7 @@ test("Scanner lock", function(t){
   });
 })
 
+/* Disabled because lo interface does not work on linux so it causes trouble on the network
 test("Scanner activity", async function(t){
   const s = new Scanner({autostart: true});
   const sv = mdns.createAdvertisement(mdns.tcp('workstation') , 9876, {})
@@ -78,6 +79,7 @@ test("Scanner activity", async function(t){
       })
     })
   })
+
   await t.test("remove service",function(t){
     return new Promise((resolve, reject)=>{
       s.once("remove",function(node){
@@ -91,3 +93,4 @@ test("Scanner activity", async function(t){
   s.stop();
 
 })
+*/
