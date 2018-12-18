@@ -1,6 +1,8 @@
 'use strict';
+const http = require("http");
 
-module.exports = function createService(name, opts){
+
+function createServiceObject(name, opts){
   return Object.assign({
     interfaceIndex: 2,
     type: {
@@ -18,3 +20,8 @@ module.exports = function createService(name, opts){
     addresses: [ '192.168.1.126' ],
   }, opts);
 }
+
+
+module.exports = {
+  createServiceObject
+};

@@ -2,15 +2,9 @@
 const http = require('http')
 const port = 3000
 
-const {Register} = require("./lib");
+const {Scanner} = require("./lib");
 
-const s = new Register("products.db");
-
-s.waitForDB().catch((e)=>{
-  console.error("Wailed to get db : ",e);
-  process.exit(1);
-})
-
+const s = new Scanner({autostart:true, autorefresh:10000});
 
 s.on("error", console.error);
 s.on("add",function(item){
@@ -22,7 +16,7 @@ s.on("remove",function(item){
 })
 
 const server = http.createServer(async (req, res)=>{
-  const nodes = await s.getNodes();
+  const nodes = s.list;
   res.end(JSON.stringify(nodes));
 })
 server.listen(port);
