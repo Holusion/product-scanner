@@ -47,11 +47,5 @@ test("Node.merge()",function(t){
     t.deepEqual(n1, new Node({name: "toto", bar:"foobar"}));
     t.end();
   })
-  t.test("can merge invalid values",function(t){
-    const n1 = new Node({name: "toto", bar:"foobar"})
-    n1.merge(null);
-    t.deepEqual(n1, new Node({name: "toto", bar:"foobar"}));
-    t.end();
-  })
   t.end();
 })

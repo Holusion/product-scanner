@@ -42,12 +42,18 @@ test('Scanner.add()',function(t){
   t.test("emit change event",function(t){
     const s = new Scanner({autostart: false}); //do not auto-start
     const obj = createServiceObject("foo-01", {fullname:"foo-01-unique-name"});
-    s.on("change",function(list){
+    const obj2 = Object.assign({}, obj, {status: "running"});
+    s.once("change",function(list){
       t.type(list, Array);
       t.equal(list.length, 1);
-      t.end();
+      s.once("change", function(list){
+        t.equal(list[0].status, "running");
+        t.end()
+      });
+      s.add(Node.createFromService(obj2));
     });
     s.add(Node.createFromService(obj));
+    
   })
   t.end();
 })
