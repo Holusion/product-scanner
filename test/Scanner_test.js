@@ -5,7 +5,7 @@ const {createServiceObject } = require("./service_mocks");
 const mdns = require("mdns");
 
 const {Scanner, } = require("../lib/Scanner");
-const {Node} = require("../lib/Node");
+const {fromService, deserialize} = require("../lib/nodes");
 const {BrowseError} = require("../lib/errors");
 
 function delay(t){ return new Promise((r)=> setTimeout(r, t))};
@@ -13,15 +13,15 @@ function delay(t){ return new Promise((r)=> setTimeout(r, t))};
 test('Scanner.findIndex()',function(t){
   const s = new Scanner({autostart: false}); //do not auto-start
   s._data = [
-    Node.createFromService(createServiceObject("foo-01")),
-    Node.createFromService(createServiceObject("foo-02"))
+    fromService(createServiceObject("foo-01")),
+    fromService(createServiceObject("foo-02"))
   ];
   t.test("return -1 when not found",function(t){
-    t.equal(s.findIndex(Node.createFromService(createServiceObject("foo-03"))), -1);
+    t.equal(s.findIndex(fromService(createServiceObject("foo-03"))), -1);
     t.end();
   })
   t.test("return index when found",function(t){
-    t.equal(s.findIndex(Node.createFromService(createServiceObject("foo-02"))), 1);
+    t.equal(s.findIndex(fromService(createServiceObject("foo-02"))), 1);
     t.end();
   })
   t.end();
@@ -50,10 +50,9 @@ test('Scanner.add()',function(t){
         t.equal(list[0].status, "running");
         t.end()
       });
-      s.add(Node.createFromService(obj2));
+      s.add(fromService(obj2));
     });
-    s.add(Node.createFromService(obj));
-    
+    s.add(fromService(obj));
   })
   t.end();
 })
@@ -71,6 +70,47 @@ test("Scanner lock", function(t){
   });
 })
 
+test("Scanner refresh",function(t){
+  let s;
+  let obj
+  t.beforeEach(function(done){
+    s = new Scanner({autostart: false});
+    obj = deserialize({name:"foo"});
+    obj.withStatus = function() {
+      return Promise.resolve(Object.assign({}, this, {version: "3.0.0"}))
+    };
+    s.once("add", ()=> done());
+    s.add(obj);
+  })
+
+  t.test("update list", (t)=>{
+    return s.refresh()
+    .then(()=>{
+      t.equal(s.list[0].version,"3.0.0");
+    })
+  })
+  t.test("emit change event", function(t){
+    //Make sure we don't catch the first "change" event
+    setImmediate(function(){
+      s.on("change",function(){
+        t.equal(s.list[0].version,"3.0.0");
+        t.end()
+      })
+    });
+    s.refresh();
+  })
+  t.test("emit update event", function(t){
+    //Make sure we don't catch the first "change" event
+    setImmediate(function(){
+      s.on("update", function(n){
+        t.equal(n.version,"3.0.0");
+        t.end()
+      })
+    });
+    s.refresh();
+  })
+  t.end();
+})
 /* Disabled because lo interface does not work on linux so it causes trouble on the network
 test("Scanner activity", async function(t){
   const s = new Scanner({autostart: true});
