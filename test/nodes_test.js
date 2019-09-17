@@ -57,10 +57,10 @@ test("merge()",function(t){
 
 test("dial()",function(t){
   t.test("can dial to existing host 8.8.8.8:443",function(t){
-    return dial("8.8.8.8", 443);
+    return dial("8.8.8.8", {port:443, timeout: 150});
   })
   t.test("can't dial to invalid host 127.0.0.1:5432",function(t){
-    return t.rejects(dial("127.0.0.1", 5432));
+    return t.rejects(dial("127.0.0.1", {port:5432, timeout: 150}));
   });
   t.end();
 })

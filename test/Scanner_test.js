@@ -72,15 +72,19 @@ test("Scanner lock", function(t){
 
 test("Scanner refresh",function(t){
   let s;
-  let obj
-  t.beforeEach(function(done){
+  t.beforeEach(function(done, t){
     s = new Scanner({autostart: false});
-    obj = deserialize({name:"foo"});
-    obj.withStatus = function() {
-      return Promise.resolve(Object.assign({}, this, {version: "3.0.0"}))
-    };
-    s.once("add", ()=> done());
-    s.add(obj);
+    t.context.objects = [
+      deserialize({name:"foo"}),
+      deserialize({name: "bar"})
+    ].map((obj)=>{
+      obj.withStatus = function() {
+        return Promise.resolve(Object.assign({}, this, obj.name == "foo"?{version: "3.0.0"}: {}))
+      };
+      s.add(obj);
+      return obj;
+    })
+    done();
   })
 
   t.test("update list", (t)=>{
@@ -91,22 +95,38 @@ test("Scanner refresh",function(t){
   })
   t.test("emit change event", function(t){
     //Make sure we don't catch the first "change" event
-    setImmediate(function(){
-      s.on("change",function(){
-        t.equal(s.list[0].version,"3.0.0");
-        t.end()
-      })
-    });
+    s.on("change",function(){
+      t.equal(s.list[0].version,"3.0.0");
+      t.end()
+    })
     s.refresh();
   })
   t.test("emit update event", function(t){
     //Make sure we don't catch the first "change" event
-    setImmediate(function(){
-      s.on("update", function(n){
-        t.equal(n.version,"3.0.0");
-        t.end()
+    s.on("update", function(n){
+      t.equal(n.version,"3.0.0");
+      t.end()
+    })
+    s.refresh();
+  })
+  t.test("Event is emitted after list has been updated", function(t){
+    s.list[0].withStatus = function(){
+      const res = Object.assign({}, s.list[0], {version: "foofoo"});
+      return new Promise(r=>{
+        setTimeout(()=> r(res), 10);
       })
-    });
+    }
+    s.list[1].withStatus = function(){
+      const res = Object.assign({}, s.list[1]);
+      return new Promise(r=>{
+        setTimeout(()=> r(res), 60);
+      })
+    }
+    s.on("update", function(n){
+      t.equal(s.list[0], n);
+      t.equal(s.list[0].version,"foofoo");
+      t.end()
+    })
     s.refresh();
   })
   t.end();
