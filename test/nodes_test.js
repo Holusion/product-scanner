@@ -1,6 +1,6 @@
 'use strict';
 const {test} = require('tap');
-const {isSame, mapAddresses, merge, dial, isEqual, deserialize} = require("../lib/nodes");
+const {isSame, mapAddresses, merge, dial, isEqual, deserialize, fromService} = require("../lib/nodes");
 
 
 test("nodes.deserialize()", function(t){
@@ -24,7 +24,28 @@ test("nodes.deserialize()", function(t){
   })
   t.end();
 })
-
+test("nodes.fromService()", function(t){
+  t.test("build from a typical service", function(t){
+    const i = fromService({ interfaceIndex: 2,
+      type: {
+         name: 'workstation',
+         protocol: 'tcp',
+         subtypes: [],
+         fullyQualified: true },
+      replyDomain: 'local.',
+      flags: 2,
+      name: 'holopi-07 [b8:27:eb:16:fe:ce]',
+      networkInterface: 'eth0',
+      fullname:
+       'holopi-07\\032\\091b8\\05827\\058eb\\05816\\058fe\\058ce\\093._workstation._tcp.local.',
+      host: 'holopi-07.local.',
+      port: 9,
+      addresses: [ '192.168.1.129' ] })
+    t.matchSnapshot(i, "fromService");
+    t.end();
+  })
+  t.end();
+})
 test("nodes.isSame()", function(t){
   const n = {name: "foo"};
   t.test("requires a name",function(t){
