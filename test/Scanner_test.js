@@ -55,8 +55,31 @@ test('Scanner.add()',function(t){
     s.add(fromService(obj));
   })
   t.end();
-})
+});
 
+test("Scanner.remove()", function(t){
+  t.beforeEach(function(done, t){
+    t.context.obj = fromService(createServiceObject("foo-01", {fullname:"foo-01-unique-name"}));
+    t.context.s = new Scanner({autostart: false});
+    t.context.s.add(t.context.obj);
+    done();
+  })
+  t.test("emit change event",function(t){
+    t.context.s.on("change",function(list){
+      t.equal(list.length, 0);
+      t.end();
+    })
+    t.context.s.remove({name: t.context.obj.name});
+  })
+  t.test("emit remove event",function(t){
+    t.context.s.on("remove",function(n){
+      t.equal(n.name, t.context.obj.name);
+      t.end();
+    })
+    t.context.s.remove({name: t.context.obj.name});
+  })
+  t.end();
+})
 test("Scanner lock", function(t){
   const s = new Scanner({autostart: false});
   let count =0;
