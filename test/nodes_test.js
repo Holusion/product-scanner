@@ -3,6 +3,28 @@ const {test} = require('tap');
 const {isSame, mapAddresses, merge, dial, isEqual, deserialize} = require("../lib/nodes");
 
 
+test("nodes.deserialize()", function(t){
+  t.test("returns an object with a withStatus() function", function(t){
+    const i = deserialize({name:"foo"});
+    t.type(i.withStatus, 'function');
+    t.equal(i.name, "foo")
+    t.end();
+  })
+  t.test("deserialize a typical database item", function(t){
+    const i = deserialize({
+      name:"foo",
+      configuration_data: [
+        "some",
+        "data",
+        {foo:"bar"}
+      ]
+    })
+    t.matchSnapshot(i, "deserialized");
+    t.end();
+  })
+  t.end();
+})
+
 test("nodes.isSame()", function(t){
   const n = {name: "foo"};
   t.test("requires a name",function(t){
