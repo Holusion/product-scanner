@@ -6,7 +6,7 @@
  */
 'use strict'
 exports[`test/nodes_test.js TAP nodes.deserialize() deserialize a typical database item > deserialized 1`] = `
-Object {
+Node {
   "addresses": Array [],
   "configuration_data": Array [
     "some",
@@ -17,12 +17,11 @@ Object {
   ],
   "name": "foo",
   "version": "0.0.0",
-  "withStatus": AsyncFunction bound withStatus(),
 }
 `
 
 exports[`test/nodes_test.js TAP nodes.fromService() build from a typical service > fromService 1`] = `
-Object {
+Node {
   "addresses": Array [
     "192.168.1.129",
   ],
@@ -42,6 +41,5 @@ Object {
     "subtypes": Array [],
   },
   "version": "0.0.0",
-  "withStatus": AsyncFunction bound withStatus(),
 }
 `

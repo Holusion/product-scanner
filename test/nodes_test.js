@@ -1,6 +1,6 @@
 'use strict';
 const {test} = require('tap');
-const {isSame, mapAddresses, merge, dial, isEqual, deserialize, fromService} = require("../lib/nodes");
+const {isSame, mapAddresses, merge, dial, isEqual, deserialize, fromService, withStatus, Node} = require("../lib/nodes");
 
 
 test("nodes.deserialize()", function(t){
@@ -73,30 +73,56 @@ test("nodes.mapAddresses()",function(t){
   t.end();
 })
 
-test("nodes.merge()",function(t){
-  t.test("new node overwrite values",function(t){
+test("nodes.merge()", async function(t){
+  await t.test("new node overwrite values",function(t){
     const n1 = {name: "toto", foo:"something"}
     const n2 = {name: "toto", foo:"something_else"}
     const n3 = merge(n1, n2);
     t.deepEqual(n3, n2);
     t.end();
   });
-  t.test("keep known values",function(t){
-    const n1 = {name: "toto", fullname:"foobar"}
+  await t.test("keep known values",function(t){
+    const n1 = {name: "toto", fullname:"foobar", custom_prop:"foo"}
     const n2 = {name: "toto"}
     const n3 = merge(n1, n2);
     t.equal(n3.fullname, "foobar");
+    t.equal(n3.custom_prop, "foo");
     t.end();
   })
   
-  t.test("can merge invalid values",function(t){
+  await t.test("can merge invalid values",function(t){
     const n1 = {name: "toto", bar:"foobar"}
     const n2 = merge(n1, null);
     t.deepEqual(n2, {name: "toto", bar:"foobar"});
     t.end();
   })
-  t.end();
+  
+  await t.test("Keeps Node.withStatus() working", async function(t){
+    const n1 = {name: "toto", fullname:"foobar", custom_prop:"foo"}
+    const n2 = {name: "toto"}
+    const n3 = merge(n1, n2);
+    t.type(n3.withStatus, "function");
+    const n4 = await n3.withStatus();
+    t.deepEqual(n4, Object.assign(n3, {status: "unreachable"}));
+  })
 })
+test("nodes.withStatus", async function(t){
+  await t.test("Keep assigned properties", async function(t){
+    const ref = Object.freeze({name: "toto", fullname:"foobar", custom_prop:[{custom_key:"bar"}]})
+    const n = await withStatus(ref);
+    ["name", "fullname", "custom_prop"].forEach(prop=> t.deepEqual(n[prop], ref[prop]));
+  })
+  await t.test("returns a new node", async function(t){
+    const ref = Object.freeze({name: "toto", fullname:"foobar", custom_prop:[{custom_key:"bar"}]})
+    const orig = deserialize(ref);
+    t.type(orig.withStatus, "function");
+    const n = await orig.withStatus();
+    t.type(n, Node);
+    for (let prop of ["name", "fullname", "custom_prop"]){
+      t.equal(n[prop], ref[prop]);
+    }
+  });
+});
 
 test("nodes.dial()",function(t){
   t.test("can dial to existing host 8.8.8.8:443",function(t){
