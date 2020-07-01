@@ -3,9 +3,7 @@
 const {createServiceObject } = require("./__mocks__/service_mocks");
 const mdns = require("mdns");
 
-const {Scanner, } = require("../lib/Scanner");
-const {fromService, deserialize} = require("../lib/nodes");
-const {BrowseError} = require("../lib/errors");
+const {Scanner, nodes: {fromService, deserialize}, BrowseError} = require("../lib");
 
 function delay(t){ return new Promise((r)=> setTimeout(r, t))};
 
