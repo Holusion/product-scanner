@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "node example.js",
-    "test": "tap test/**_test.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,6 @@
     "mdns": "^2.5.1"
   },
   "devDependencies": {
-    "tap": "^14.6.4"
+    "jest": "^26.1.0"
   }
 }

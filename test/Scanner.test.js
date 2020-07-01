@@ -1,7 +1,6 @@
 'use strict';
 
-const {test} = require('tap');
-const {createServiceObject } = require("./service_mocks");
+const {createServiceObject } = require("./__mocks__/service_mocks");
 const mdns = require("mdns");
 
 const {Scanner, } = require("../lib/Scanner");
@@ -10,94 +9,97 @@ const {BrowseError} = require("../lib/errors");
 
 function delay(t){ return new Promise((r)=> setTimeout(r, t))};
 
-test('Scanner.findIndex()',function(t){
-  const s = new Scanner({autostart: false}); //do not auto-start
-  s._data = [
-    fromService(createServiceObject("foo-01")),
-    fromService(createServiceObject("foo-02"))
-  ];
-  t.test("return -1 when not found",function(t){
-    t.equal(s.findIndex(fromService(createServiceObject("foo-03"))), -1);
-    t.end();
+describe('Scanner.findIndex()',function(){
+  let s;
+  beforeEach(()=>{
+    s = new Scanner({autostart: false}); //do not auto-start
+    s._data = [
+      fromService(createServiceObject("foo-01")),
+      fromService(createServiceObject("foo-02"))
+    ];
   })
-  t.test("return index when found",function(t){
-    t.equal(s.findIndex(fromService(createServiceObject("foo-02"))), 1);
-    t.end();
+
+  test("return -1 when not found",function(){
+    expect(s.findIndex(fromService(createServiceObject("foo-03")))).toBe(-1);
   })
-  t.end();
+  test("return index when found",function(){
+    expect(s.findIndex(fromService(createServiceObject("foo-02")))).toBe(1);
+  })
 })
 
-test('Scanner.add()',function(t){
-  t.test("Emit error on invalid product",function(t){
+describe('Scanner.add()',function(){
+  test("Emit error on invalid product",function(done){
     const s = new Scanner({autostart: false}); //do not auto-start
     s.on("error",function(e){
-      t.type(e, BrowseError);
-      t.equal(e.name, "BrowseError");
-      t.end();
+      expect(e).toBeInstanceOf(BrowseError);
+      expect(e.name).toBe("BrowseError");
+      done()
     })
     s.on("change",function(){throw new Error("No change event should be emitted")});
     s.add({});
   })
 
-  t.test("emit change event",function(t){
+  test("emit change event",function(done){
     const s = new Scanner({autostart: false}); //do not auto-start
     const obj = createServiceObject("foo-01", {fullname:"foo-01-unique-name"});
     const obj2 = Object.assign({}, obj, {status: "running"});
     s.once("change",function(list){
-      t.type(list, Array);
-      t.equal(list.length, 1);
+      expect(list).toBeInstanceOf(Array);
+      expect(list.length).toBe(1);
       s.once("change", function(list){
-        t.equal(list[0].status, "running");
-        t.end()
+        expect(list[0].status).toBe("running");
+        done()
       });
       s.add(fromService(obj2));
     });
     s.add(fromService(obj));
   })
-  t.end();
 });
 
-test("Scanner.remove()", function(t){
-  t.beforeEach(function(done, t){
-    t.context.obj = fromService(createServiceObject("foo-01", {fullname:"foo-01-unique-name"}));
-    t.context.s = new Scanner({autostart: false});
-    t.context.s.add(t.context.obj);
-    done();
+describe("Scanner.remove()", function(){
+  let obj, s;
+  beforeEach(function(){
+    obj = fromService(createServiceObject("foo-01", {fullname:"foo-01-unique-name"}));
+    s = new Scanner({autostart: false});
+    s.add(obj);
   })
-  t.test("emit change event",function(t){
-    t.context.s.on("change",function(list){
-      t.equal(list.length, 0);
-      t.end();
+  test("emit change event",function(){
+    s.on("change",function(list){
+      expect(list.length).toBe(0);
     })
-    t.context.s.remove({name: t.context.obj.name});
+    s.remove({name: obj.name});
   })
-  t.test("emit remove event",function(t){
-    t.context.s.on("remove",function(n){
-      t.equal(n.name, t.context.obj.name);
-      t.end();
+  test("emit remove event",function(){
+    s.on("remove",function(n){
+      expect(n.name).toBe(obj.name);
     })
-    t.context.s.remove({name: t.context.obj.name});
+    s.remove({name: obj.name});
   })
-  t.end();
 })
-test("Scanner lock", function(t){
-  const s = new Scanner({autostart: false});
-  let count =0;
-  s.lock(async function(){
-    await delay(10)
-    t.equal(count++,0);
+describe("Scanner lock", function(){
+  let s;
+  beforeEach(()=>{
+    s = new Scanner({autostart: false});
   });
-  s.lock(function(){
-    t.equal(count++,1);
-    t.end()
-  });
+
+  test("check lock", function(done){
+    let count =0;
+    s.lock(async function(){
+      await delay(10)
+      expect(count++).toBe(0);
+    });
+    s.lock(function(){
+      expect(count++).toBe(1);
+      done()
+    });
+  })
 })
 
-test("Scanner refresh",function(t){
-  let s;
-  t.beforeEach(function(done, t){
+describe("Scanner refresh",function(){
+  let s, objects;
+  beforeEach(function(done){
     s = new Scanner({autostart: false});
-    t.context.objects = [
+    objects = [
       deserialize({name:"foo"}),
       deserialize({name: "bar"})
     ].map((obj)=>{
@@ -110,29 +112,29 @@ test("Scanner refresh",function(t){
     done();
   })
 
-  t.test("update list", (t)=>{
+  test("update list", ()=>{
     return s.refresh()
     .then(()=>{
-      t.equal(s.list[0].version,"3.0.0");
-    })
+      expect(s.list[0].version).toBe("3.0.0");
+    });
   })
-  t.test("emit change event", function(t){
+  test("emit change event", function(done){
     //Make sure we don't catch the first "change" event
     s.on("change",function(){
-      t.equal(s.list[0].version,"3.0.0");
-      t.end()
+      expect(s.list[0].version).toBe("3.0.0");
+      done()
     })
     s.refresh();
   })
-  t.test("emit update event", function(t){
+  test("emit update event", function(done){
     //Make sure we don't catch the first "change" event
     s.on("update", function(n){
-      t.equal(n.version,"3.0.0");
-      t.end()
+      expect(n.version).toBe("3.0.0");
+      done()
     })
     s.refresh();
   })
-  t.test("Event is emitted after list has been updated", function(t){
+  test("Event is emitted after list has been updated", function(done){
     s.list[0].withStatus = function(){
       const res = Object.assign({}, s.list[0], {version: "foofoo"});
       return new Promise(r=>{
@@ -146,13 +148,12 @@ test("Scanner refresh",function(t){
       })
     }
     s.on("update", function(n){
-      t.equal(s.list[0], n);
-      t.equal(s.list[0].version,"foofoo");
-      t.end()
+      expect(s.list[0]).toBe(n);
+      expect(s.list[0].version).toBe("foofoo");
+      done()
     })
     s.refresh();
   })
-  t.end();
 })
 /* Disabled because lo interface does not work on linux so it causes trouble on the network
 test("Scanner activity", async function(t){
