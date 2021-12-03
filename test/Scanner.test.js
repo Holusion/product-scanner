@@ -74,19 +74,19 @@ describe("Scanner.remove()", function(){
     s.remove({name: obj.name});
   })
 })
-describe("Scanner lock", function(){
+describe("Scanner serialize", function(){
   let s;
   beforeEach(()=>{
     s = new Scanner({autostart: false});
   });
 
-  test("check lock", function(done){
+  test("check serialization", function(done){
     let count =0;
-    s.lock(async function(){
+    s.serialize(async function(){
       await delay(10)
       expect(count++).toBe(0);
     });
-    s.lock(function(){
+    s.serialize(function(){
       expect(count++).toBe(1);
       done()
     });

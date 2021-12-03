@@ -25,10 +25,10 @@
   },
   "homepage": "https://github.com/Holusion/product-scanner#readme",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "mdns": "^2.5.1"
+    "isomorphic-fetch": "^3.0.0",
+    "mdns": "^2.7.2"
   },
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^27.4.3"
   }
 }
