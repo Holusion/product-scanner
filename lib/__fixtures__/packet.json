@@ -1,0 +1,138 @@
+{
+  "id": 0,
+  "type": "response",
+  "flags": 1024,
+  "flag_qr": true,
+  "opcode": "QUERY",
+  "flag_aa": true,
+  "flag_tc": false,
+  "flag_rd": false,
+  "flag_ra": false,
+  "flag_z": false,
+  "flag_ad": false,
+  "flag_cd": false,
+  "rcode": "NOERROR",
+  "questions": [],
+  "answers": [
+    {
+      "name": "_http._tcp.local",
+      "type": "PTR",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": false,
+      "data": "holobox-06 HTTP._http._tcp.local"
+    },
+    {
+      "name": "holobox-06 HTTP._http._tcp.local",
+      "type": "TXT",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": true,
+      "data": [
+        {
+          "type": "Buffer",
+          "data": []
+        }
+      ]
+    },
+    {
+      "name": "holobox-06 HTTP._http._tcp.local",
+      "type": "SRV",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": {
+        "priority": 0,
+        "weight": 0,
+        "port": 80,
+        "target": "holobox-06.local"
+      }
+    },
+    {
+      "name": "holobox-06.local",
+      "type": "AAAA",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": "fe80::d314:e487:3af9:a295"
+    },
+    {
+      "name": "holobox-06.local",
+      "type": "A",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": "192.168.1.119"
+    },
+    {
+      "name": "_workstation._tcp.local",
+      "type": "PTR",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": false,
+      "data": "holobox-06 [b0:41:6f:04:0e:af]._workstation._tcp.local"
+    },
+    {
+      "name": "holobox-06 [b0:41:6f:04:0e:af]._workstation._tcp.local",
+      "type": "TXT",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": true,
+      "data": [
+        {
+          "type": "Buffer",
+          "data": []
+        }
+      ]
+    },
+    {
+      "name": "holobox-06 [b0:41:6f:04:0e:af]._workstation._tcp.local",
+      "type": "SRV",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": {
+        "priority": 0,
+        "weight": 0,
+        "port": 9,
+        "target": "holobox-06.local"
+      }
+    },
+    {
+      "name": "_ssh._tcp.local",
+      "type": "PTR",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": false,
+      "data": "holobox-06._ssh._tcp.local"
+    },
+    {
+      "name": "holobox-06._ssh._tcp.local",
+      "type": "TXT",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": true,
+      "data": [
+        {
+          "type": "Buffer",
+          "data": []
+        }
+      ]
+    },
+    {
+      "name": "holobox-06._ssh._tcp.local",
+      "type": "SRV",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": {
+        "priority": 0,
+        "weight": 0,
+        "port": 22,
+        "target": "holobox-06.local"
+      }
+    }
+  ],
+  "authorities": [],
+  "additionals": []
+}

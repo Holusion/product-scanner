@@ -1,0 +1,11 @@
+
+{
+  "address": "192.168.1.119",
+  "host": "holobox-06.local",
+  "services": [
+    "_http._tcp.local",
+    "_workstation._tcp.local",
+    "_ssh._tcp.local"
+  ],
+  "ttl": 4500
+}
