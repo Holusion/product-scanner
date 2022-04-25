@@ -14,6 +14,19 @@
       }
     },
     {
+      "name": "Holusion Controller._holusion._tcp.local",
+      "type": "SRV",
+      "ttl": 120,
+      "class": "IN",
+      "flush": true,
+      "data": {
+        "priority": 0,
+        "weight": 0,
+        "port": 3000,
+        "target": "holobox-06.local"
+      }
+    },
+    {
       "name": "holobox-06 [b0:41:6f:04:0e:af]._workstation._tcp.local",
       "type": "SRV",
       "ttl": 120,
@@ -48,6 +61,14 @@
       "class": "IN",
       "flush": false,
       "data": "holobox-06 HTTP._http._tcp.local"
+    },
+    {
+      "name": "_holusion._tcp.local",
+      "type": "PTR",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": false,
+      "data": "Holusion Controller._holusion._tcp.local"
     },
     {
       "name": "_workstation._tcp.local",
@@ -93,25 +114,25 @@
       "ttl": 4500,
       "class": "IN",
       "flush": true,
-      "data": [
-        {
-          "type": "Buffer",
-          "data": []
-        }
-      ]
+      "data": ""
     },
+    {
+      "name": "Holusion Controller._holusion._tcp.local",
+      "type": "TXT",
+      "ttl": 4500,
+      "class": "IN",
+      "flush": true,
+      "data": {
+        "version": "4.3.1"
+      }
+    },    
     {
       "name": "holobox-06 [b0:41:6f:04:0e:af]._workstation._tcp.local",
       "type": "TXT",
       "ttl": 4500,
       "class": "IN",
       "flush": true,
-      "data": [
-        {
-          "type": "Buffer",
-          "data": []
-        }
-      ]
+      "data": ""
     },
     {
       "name": "holobox-06._ssh._tcp.local",
@@ -119,12 +140,7 @@
       "ttl": 4500,
       "class": "IN",
       "flush": true,
-      "data": [
-        {
-          "type": "Buffer",
-          "data": []
-        }
-      ]
+      "data": ""
     }
   ]
 }

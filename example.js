@@ -1,22 +1,31 @@
 'use strict';
-const http = require('http')
-const port = 3000
-
-const {Scanner} = require("./lib");
-
-const s = new Scanner({autostart:true, autorefresh:10000});
-
-s.on("error", console.error);
-s.on("add",function(item){
-  console.log("ADD", item);
+import multicastDns from "multicast-dns";
+import Store from "./lib/index.js";
+/*
+let b = new ProductScanner();
+b.on("up", function(s){
+  console.log("Service UP : ", s);
 })
-
-s.on("remove",function(item){
-  console.log("REMOVE", item);
+b.on("down", function(s){
+  console.log("Service DOWN : ", s);
 })
+//*/
+/*
+const r = new Registry();
+r.on("up", (record)=>console.log("New Record : %s %s (%s)",record.name, record.host, record.address));
+r.on("change", (record)=>console.log("Update Record : %s %s (%s)",record.name, record.host, record.address));
+r.on("down", (record)=>console.log("Remove Record : %s %s (%s)",record.name, record.host, record.address));
 
-const server = http.createServer(async (req, res)=>{
-  const nodes = s.list;
-  res.end(JSON.stringify(nodes));
-})
-server.listen(port);
+r.query()
+//*/
+
+
+let mdns = multicastDns();
+let store = new Store({mdns});
+store.on("add", function(host){
+  console.log("ADD : ", new Date(), host);
+});
+
+store.on("remove", function(host){
+  console.log("RM", new Date(), host);
+});

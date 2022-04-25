@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node lib/index.js",
     "test": "mocha",
-    "watch": "npm test -- --watch --parallel",
+    "watch": "npm test -- --watch --parallel --reporter min",
     "coverage": "npx c8@latest npm test"
   },
   "repository": {

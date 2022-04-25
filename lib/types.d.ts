@@ -1,6 +1,5 @@
 import { ResponsePacket, MulticastDNS, RemoteInfoOutgoing } from "multicast-dns";
 import {SrvAnswer, StringAnswer, TxtAnswer, StringAnswer} from "dns-packet";
-import { Store } from "./loop";
 
 
 /**
@@ -23,6 +22,8 @@ interface Host{
   host?: string;
   services: string[];
   ttl: number;
+  status?: "unreachable"|"online"|"running";
+  version?: string;
 }
 
 /**
@@ -47,3 +48,7 @@ interface QueryParams {
   /**If not provided, use the default destination address (typ. broadcast) */
   address?: RemoteInfoOutgoing;
 }
+
+export default class Store extends EventEmitter{
+
+};

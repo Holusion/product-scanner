@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "module":"es2022",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "lib": ["ES2021"],
+    "target": "ES2021"
+  },
+  "exclude": ["node_modules", "dist", "build"],
+  "typeAcquisition": {
+    "include": [
+        "mocha",
+        "chai"
+    ]
+  }
+}

@@ -4,8 +4,11 @@
   "host": "holobox-06.local",
   "services": [
     "_http._tcp.local",
+    "_holusion._tcp.local",
     "_workstation._tcp.local",
     "_ssh._tcp.local"
   ],
-  "ttl": 4500
+  "ttl": 4500,
+  "version": "4.3.1",
+  "status": "running"
 }
