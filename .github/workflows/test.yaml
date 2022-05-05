@@ -9,7 +9,7 @@ jobs:
   test:
     name: Test on node ${{ matrix.node-version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-
+    timeout-minutes: 2
     strategy:
       matrix:
         node-version: [16.x, 18.x]
