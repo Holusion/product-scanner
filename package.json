@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/Holusion/product-scanner#readme",
   "engines": {
-    "node": ">=16"
+    "node": ">=16.14"
   },
   "dependencies": {
     "async-lock": "^1.3.1",
