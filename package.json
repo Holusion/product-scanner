@@ -4,9 +4,12 @@
   "description": "MDNS network scanner for holusion products",
   "public": true,
   "main": "lib/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node example.js",
-    "test": "jest"
+    "start": "node lib/index.js",
+    "test": "mocha",
+    "watch": "npm test -- --watch --parallel --reporter min",
+    "coverage": "npx c8@latest npm test"
   },
   "repository": {
     "type": "git",
@@ -23,12 +26,27 @@
   "bugs": {
     "url": "https://github.com/Holusion/product-scanner/issues"
   },
+  "mocha": {
+    "require": "./lib/__tests__/test-common.js",
+    "ui": "bdd",
+    "recursive": true,
+    "colors": true,
+    "reporter": "spec",
+    "check-leaks": true,
+    "spec": [
+      "lib/**/*.test.js"
+    ]
+  },
   "homepage": "https://github.com/Holusion/product-scanner#readme",
+  "engines": {
+    "node": ">=16.14"
+  },
   "dependencies": {
-    "isomorphic-fetch": "^3.0.0",
-    "mdns": "^2.7.2"
+    "multicast-dns": "^7.2.4"
   },
   "devDependencies": {
-    "jest": "^27.4.3"
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^9.2.1"
   }
 }

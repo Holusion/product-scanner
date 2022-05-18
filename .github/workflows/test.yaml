@@ -9,7 +9,7 @@ jobs:
   test:
     name: Test on node ${{ matrix.node-version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-
+    timeout-minutes: 2
     strategy:
       matrix:
         node-version: [16.x, 18.x]
@@ -17,9 +17,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: install dependencies
-      run: |
-        sudo apt-get install libavahi-compat-libdnssd-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
