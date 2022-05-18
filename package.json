@@ -1,6 +1,6 @@
 {
   "name": "@holusion/product-scanner",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "MDNS network scanner for holusion products",
   "public": true,
   "main": "lib/index.js",
