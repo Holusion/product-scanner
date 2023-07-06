@@ -30,15 +30,11 @@ interface Host{
  * Necessary parameters to run the event loop.
  */
 interface EventLoopParams{
-  mdns: MulticastDNS;
-  signal: AbortSignal;
+  mdns?: MulticastDNS;
+  signal?: AbortSignal;
+  randomDelay?: number;
 }
 
-interface LoopParams extends EventLoopParams{
-  store: Store;
-  /** Applies this additional delay to query requests. Defaults to a random value 0-2000ms but can be set to a predefined delay for tests */
-  delay?: number;
-}
 /**
  * 
  */
@@ -49,6 +45,4 @@ interface QueryParams {
   address?: RemoteInfoOutgoing;
 }
 
-export default class Store extends EventEmitter{
-
-};
+export default async function* productScanner(params?: EventLoopParams) :AsyncGenerator<Host,void, undefined>;

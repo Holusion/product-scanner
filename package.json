@@ -4,6 +4,7 @@
   "description": "MDNS network scanner for holusion products",
   "public": true,
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "type": "module",
   "scripts": {
     "start": "node lib/index.js",
