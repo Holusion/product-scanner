@@ -49,5 +49,12 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "mocha": "^10.2.0"
-  }
+  },
+  "files": [
+    "lib/**/*.js",
+    "**/*.d.ts",
+    "!lib/**/*.test.js",
+    "!lib/__fixtures__/**",
+    "!lib/__tests__/**"
+  ]
 }
